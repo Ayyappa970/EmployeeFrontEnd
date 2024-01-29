@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { deleteEmployee, listOfEmployees } from '../Services/EmployeeService'
+import {deleteEmployee, listOfEmployees} from '../Services/EmployeeService'
 import { useNavigate } from 'react-router-dom'
 const ListOfEmployeesComponent = () => {
-    let[employees,setEmployees]=useState([])
-    const navigator=useNavigate()
-    function getAllEmployee(){
+    const[employees,setEmployees]=useState([])
+    const navigator=useNavigate();
+    function getAllEmployees(){
         listOfEmployees().then((resp)=>{
             setEmployees(resp.data)
         }).catch(error=>{
@@ -12,7 +12,7 @@ const ListOfEmployeesComponent = () => {
         })
     }
     useEffect(()=>{
-        getAllEmployee();
+        getAllEmployees();
     },[])
     function addEmployee(){
         navigator('/add-employee')
@@ -22,6 +22,7 @@ const ListOfEmployeesComponent = () => {
     }
     function removeEmployee(id){
         deleteEmployee(id).then((resp)=>{
+            getAllEmployees();
             console.log(resp.data)
         }).catch(error=>{
             console.error(error)
@@ -29,17 +30,17 @@ const ListOfEmployeesComponent = () => {
     }
   return (
     <div className="container">
-        <h1 className="text-center">Employee Details</h1>
-        <button className="btn btn-primary mt-2 mb-2" onClick={addEmployee}>Add Employee</button>
+        <h1 className="text-center">Employees Table</h1>
+        <button className="btn btn-primary mt-3 mb-3" onClick={addEmployee}>Add Employee</button>
         <table className="table table-striped table-bordered">
             <thead>
                 <tr>
-                <th>Id</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Mobile Number</th>
-                <th>Actions</th>
+                    <th>id</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Mobile Number</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,7 +54,7 @@ const ListOfEmployeesComponent = () => {
                         <td>{emp.mobileNumber}</td>
                         <td>
                             <button className="btn btn-info" onClick={()=>updateEmployee(emp.id)}>Update</button>
-                            <button style={{marginLeft:'10px'}} className="btn btn-danger" onClick={()=>removeEmployee(emp.id)}>Delete</button>
+                            <button className="btn btn-danger" onClick={()=>removeEmployee(emp.id)}>Delete</button>
                         </td>
                     </tr>)
                 }
